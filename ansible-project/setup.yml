@@ -1,0 +1,16 @@
+---
+- name: Базовая настройка нашего сервера
+  hosts: localhost
+  become: true  # Говорит Ansible выполнять действия через sudo
+
+  tasks:
+    - name: Установить утилиту curl, если её нет
+      apt:
+        name: curl
+        state: present  # present означает "должна быть установлена"
+
+    - name: Создать папку для отчетов
+      file:
+        path: /home/work/reports
+        state: directory
+        mode: '0755'
