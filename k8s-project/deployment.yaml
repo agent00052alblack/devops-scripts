@@ -20,3 +20,41 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 80
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-site-deployment
+  labels:
+    app: my-site
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-site
+  template:
+    metadata:
+      labels:
+        app: my-site
+    spec:
+      containers:
+        - name: my-site
+          image: my-site:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
+          env:
+            - name: SITE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: my-site-config
+                  key: SITE_ENV
+            - name: WELCOME_MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: my-site-config
+                  key: WELCOME_MESSAGE
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-site-secret
+                  key: DB_PASSWORD
